@@ -7,8 +7,25 @@ if (!fs.existsSync(allureResultsDir)) {
   fs.mkdirSync(allureResultsDir, { recursive: true });
 }
 
+// Helper function to generate a simple UUID as fallback
+function generateSimpleUUID() {
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+}
+
 // Helper function to create a simple Allure result file
 function createAllureResult(testName, status, details = {}) {
+  let uuidModule;
+  
+  // Try to use the uuid module, fall back to simple UUID generator
+  try {
+    uuidModule = require('uuid');
+  } catch (e) {
+    console.warn('uuid module not found, using fallback UUID generator');
+    uuidModule = {
+      v4: generateSimpleUUID
+    };
+  }
+  
   const result = {
     name: testName,
     status: status,
@@ -18,8 +35,8 @@ function createAllureResult(testName, status, details = {}) {
     parameters: [],
     start: Date.now() - 1000,
     stop: Date.now(),
-    uuid: require('uuid').v4(),
-    historyId: require('uuid').v4(),
+    uuid: uuidModule.v4(),
+    historyId: uuidModule.v4(),
     fullName: testName,
     labels: [
       { name: 'language', value: 'javascript' },
@@ -27,14 +44,14 @@ function createAllureResult(testName, status, details = {}) {
       { name: 'thread', value: process.pid.toString() }
     ]
   };
-
+  
   if (status === 'failed' && details.error) {
     result.statusDetails = {
       message: details.error.message,
       trace: details.error.stack
     };
   }
-
+  
   const fileName = `${result.uuid}-result.json`;
   fs.writeFileSync(path.join(allureResultsDir, fileName), JSON.stringify(result));
 }
