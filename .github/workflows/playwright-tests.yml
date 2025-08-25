@@ -1,33 +1,45 @@
+# GitHub Actions workflow for running Playwright tests and generating Allure reports
+# This workflow runs on pushes to main/develop branches and on pull requests to main
+
 name: Playwright Tests
 
+# Trigger the workflow on pushes to main or develop branches and on pull requests to main
 on:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
+# Define the job(s) to run
 jobs:
   test:
+    # Run the job on the latest Ubuntu runner
     runs-on: ubuntu-latest
     
     steps:
+    # Step 1: Checkout the repository code
     - name: Checkout code
       uses: actions/checkout@v3
     
+    # Step 2: Set up Node.js environment
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
     
+    # Step 3: Install project dependencies
     - name: Install dependencies
       run: npm ci
     
+    # Step 4: Install Playwright browser dependencies
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
     
+    # Step 5: Run Playwright tests with Allure reporting
     - name: Run Playwright tests
       run: npm run test:allure
     
+    # Step 6: Upload test results as artifacts (always run, even if tests fail)
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v3
@@ -37,10 +49,12 @@ jobs:
           allure-results/
           test-results/
     
+    # Step 7: Generate Allure HTML report from test results
     - name: Generate Allure report
       if: always()
       run: npm run allure:generate
     
+    # Step 8: Upload Allure report as artifacts (always run)
     - name: Upload Allure report
       if: always()
       uses: actions/upload-artifact@v3
@@ -48,6 +62,7 @@ jobs:
         name: allure-report
         path: allure-report/
     
+    # Step 9: Deploy Allure report to GitHub Pages (only on main branch)
     - name: Deploy Allure report to GitHub Pages
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
