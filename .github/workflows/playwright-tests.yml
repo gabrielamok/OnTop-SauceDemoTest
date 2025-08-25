@@ -1,6 +1,6 @@
 # GitHub Actions workflow for running Playwright tests and generating Allure reports
 # This workflow runs on pushes to main/develop branches and on pull requests to main
-
+# Correction to avoind errors in Actions
 name: Playwright Tests
 
 on:
