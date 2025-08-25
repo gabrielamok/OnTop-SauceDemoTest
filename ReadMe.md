@@ -37,7 +37,7 @@ npm or yarn
 Installation
 1. Clone the repository
 
-git clone https://github.com/yourusername/saucedemo-automation.git
+git clone https://github.com/gabrielamok/OnTop-SauceDemoTest
 cd saucedemo-automation
 
 
