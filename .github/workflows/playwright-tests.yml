@@ -1,6 +1,6 @@
 # GitHub Actions workflow for running Playwright tests and generating Allure reports
 # This workflow runs on pushes to main/develop branches and on pull requests to main
-# Correction to avoind errors in Actions
+# Correction to avoid errors in Actions
 name: Playwright Tests
 
 on:
@@ -51,11 +51,15 @@ jobs:
       with:
         name: allure-report
         path: allure-report/
-    
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
     - name: Deploy Allure report to GitHub Pages
-      if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.SAUCEDEMO_TOKEN }}
         publish_dir: ./allure-report
-        destination_dir: ./allure-report
+        destination_dir: ./
