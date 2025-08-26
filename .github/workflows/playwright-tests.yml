@@ -2,6 +2,7 @@
 # This workflow runs on pushes to main/develop branches and on pull requests to main
 # Correction to avoid errors in Actions
 # GitHub Actions workflow for running Playwright tests and generating Allure reports
+# GitHub Actions workflow for running Playwright tests and generating Allure reports
 name: Playwright Tests
 
 on:
@@ -81,4 +82,3 @@ jobs:
         github_token: ${{ secrets.SAUCEDEMO_TOKEN }}
         publish_dir: ./allure-report
         destination_dir: ./
-        keep_files: false
