@@ -3,11 +3,12 @@
 # Correction to avoid errors in Actions
 # GitHub Actions workflow for running Playwright tests and generating Allure reports
 # GitHub Actions workflow for running Playwright tests and generating Allure reports
+# GitHub Actions workflow for running Playwright tests and generating Allure reports
 name: Playwright Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [  main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -29,14 +30,14 @@ jobs:
       run: npm ci
     
     - name: Install Playwright browsers
-      run: npx playwright install --with-deps
+      run: npm run postinstall
     
     - name: Run Playwright tests
       run: npm run test:allure
     
     - name: Upload test results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: changesets/action@v4
       with:
         name: test-results
         path: |
@@ -49,7 +50,7 @@ jobs:
     
     - name: Upload Allure report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: changesets/action@v4
       with:
         name: allure-report
         path: allure-report/
@@ -77,8 +78,9 @@ jobs:
       run: npm run allure:generate
     
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        github_token: ${{ secrets.SAUCEDEMO_TOKEN }}
-        publish_dir: ./allure-report
-        destination_dir: ./
+        GITHUB_TOKEN: ${{ secrets.SAUCEDEMO_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: allure-report
+        CLEAN: true
