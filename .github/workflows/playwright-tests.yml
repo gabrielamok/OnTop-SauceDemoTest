@@ -1,16 +1,10 @@
-# GitHub Actions workflow for running Playwright tests and generating Allure reports
-# This workflow runs on pushes to main/develop branches and on pull requests to main
-# Correction to avoid errors in Actions
-# GitHub Actions workflow for running Playwright tests and generating Allure reports
-# GitHub Actions workflow for running Playwright tests and generating Allure reports
-# GitHub Actions workflow for running Playwright tests and generating Allure reports
 name: Playwright Tests
 
 on:
   push:
-    branches: [  main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -37,7 +31,7 @@ jobs:
     
     - name: Upload test results
       if: always()
-      uses: changesets/action@v4
+      uses: actions/upload-artifact@v4
       with:
         name: test-results
         path: |
@@ -50,7 +44,7 @@ jobs:
     
     - name: Upload Allure report
       if: always()
-      uses: changesets/action@v4
+      uses: actions/upload-artifact@v4
       with:
         name: allure-report
         path: allure-report/
@@ -63,7 +57,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Fetch all history for all branches and tags
+        fetch-depth: 0
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -80,7 +74,7 @@ jobs:
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        GITHUB_TOKEN: ${{ secrets.SAUCEDEMO_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages
         FOLDER: allure-report
         CLEAN: true
