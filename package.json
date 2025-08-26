@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Automated tests for SauceDemo e-commerce platform",
   "main": "index.js",
-  "scripts": {
+    "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
